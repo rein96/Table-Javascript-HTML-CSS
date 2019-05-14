@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Table nomor 3</title>
+
+    <style>
+        table, th, td {
+            border: 2px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 7px;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        Nama: <input type="text" name="inputNama" id="inputNama">    
+        Tgl.lahir: <input type="date" name="inputTanggal" id="inputTanggal">
+        Kota: <input type="text" name="inputKota" id="inputKota">
+    </center>
+
+    <br><br>
+
+    <center>
+        <center><input type="button" value="Daftar Baru" onclick="submit()"></center>
+        <br>
+
+        <input type="button" value="Sort Nama ↑" onclick="namaAscending()" >
+
+        <input type="button" value="Sort Nama ↓" onclick="namaDescending()" >
+
+        <input type="button" value="Sort Usia ↑" onclick="usiaAscending()">
+
+        <input type="button" value="Sort Usia ↓" onclick="usiaDescending()">
+
+        <input type="button" value="Sort Kota ↑" onclick="kotaAscending()">
+
+        <input type="button" value="Sort kota ↓" onclick="kotaDescending()">
+
+        <br><br>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th colspan="3" >Tanggal Lahir</th>
+                    <th>Zodiak</th>
+                    <th>Usia</th>
+                    <th>Pensiun</th>
+                    <th>Kota</th>
+                    <th>Hapus</th>
+                </tr>
+            </thead>
+            <tbody id='isiBaris'>
+
+                <!-- <tr>
+                    <td><center>Budi</center></td>
+                    <td><center>12</center></td>
+                    <td><center>Januari</center></td>
+                    <td><center>1986</center></td>
+                    <td><center>Capricorn</center></td>
+                    <td><center>32</center></td>
+                    <td><center>-23</center></td>
+                    <td><center>Ambon</center></td>
+                    <td><input type="button" value="Hapus" onclick="hapusRow()"></td>
+                </tr> -->
+
+            </tbody>
+
+        </table>
+
+    </center>
+
+</body>
+
+
+<script>
+
+    function ShowList(arrayData) {
+        var list = arrayData.map( (val, i) => `
+            <tr>
+                <td><center>${val.inputNama}</center></td>
+                <td><center>${val.tanggal}</center></td>
+                <td><center>${val.bulanShow}</center></td>
+                <td><center>${val.tahun}</center></td>
+                <td><center>${val.zodiak}</center></td>
+                <td><center>${val.umur}</center></td>
+                <td><center>${val.pensiun}</center></td>
+                <td><center>${val.inputKota}</center></td>
+                <td><input type="button" value="Hapus" onclick="hapusRow(${i})"></td>
+            </tr>
+            `  )
+            document.getElementById('isiBaris').innerHTML = list.join(' ');
+    }
+
+    var arrayData = [];
+    arrayData[0] = {inputNama: "Reinhart", tanggal: 19, bulanShow: "March", tahun: 1996, zodiak:'Pisces', umur:23, pensiun:-32,inputKota:'Jakarta'}
+    arrayData[1] = {inputNama: "Ann", tanggal: 23, bulanShow: "February", tahun: 1990, zodiak:'Gemini', umur:29, pensiun:-26,inputKota:'New York'}
+    arrayData[2] = {inputNama: "Steph", tanggal: 03, bulanShow: "September", tahun: 1995, zodiak:'Virgo', umur:24, pensiun:-31,inputKota:'Tangerang'}
+
+    console.log(arrayData);
+    ShowList(arrayData);
+
+
+    function submit() {
+        var inputNama = document.getElementById('inputNama').value;
+        var inputTanggal = document.getElementById('inputTanggal').value;       //1996-03-19 
+        var inputKota = document.getElementById('inputKota').value;
+
+        if ( inputNama == "" || inputTanggal == "" || inputKota == "" ) {
+            alert('Harus input Nama, Tanggal, dan Kota !')
+        }
+        else {
+            inputNama = inputNama.charAt(0).toUpperCase() + inputNama.slice(1).toLowerCase();
+
+            var splitTanggal = inputTanggal.split('-');     // ["1996", "03", "19"]
+            var tanggal = splitTanggal[2];  //19
+            var bulan = Number(splitTanggal[1]);    //03
+                var month = new Array();
+                month[0] = "January";
+                month[1] = "February";
+                month[2] = "March";
+                month[3] = "April";
+                month[4] = "May";
+                month[5] = "June";
+                month[6] = "July";
+                month[7] = "August";
+                month[8] = "September";
+                month[9] = "October";
+                month[10] = "November";
+                month[11] = "December";
+            var bulanShow = month[bulan-1];
+            
+            var tahun = splitTanggal[0];    //1996
+
+            inputKota = inputKota.charAt(0).toUpperCase() + inputKota.slice(1).toLowerCase();
+
+            var zodiak='';
+            if(bulanShow == "December"){
+                if(tanggal <= 21){
+                    zodiak = "Sagitarius"
+                } else{
+                    zodiak = "Capricorn"
+                }
+            } else if(bulanShow == "January"){
+                if(tanggal <= 20){
+                    zodiak = "Capricorn"
+                } else{
+                    zodiak = "Aquarius"
+                }
+            } else if(bulanShow == "February"){
+                if(tanggal <= 18){
+                    zodiak ="Aquarius"
+                } else{
+                    zodiak ="Pisces"
+                }
+            } else if(bulanShow == "March"){
+                if(tanggal <= 20){
+                    zodiak = "Pisces"
+                } else {
+                    zodiak = "Aries"
+                }
+            } else if(bulanShow == "April"){
+                if(tanggal <= 19){
+                    zodiak = "Aries"
+                } else {
+                    zodiak = "Taurus"
+                }
+            } else if(bulanShow == "May"){
+                if(tanggal <= 20){
+                    zodiak = "Taurus"
+                } else {
+                    zodiak = "Gemini"
+                }
+            } else if(bulanShow == "June"){
+                if(tanggal <= 20){
+                    zodiak = "Gemini"
+                } else{
+                    zodiak = "Cancer"
+                }
+            } else if(bulanShow == "July"){
+                if(tanggal <= 22){
+                    zodiak = "Cancer"
+                } else {
+                    zodiak = "Leo"
+                }
+            } else if(bulanShow == "August"){
+                if(tanggal <= 22){
+                    zodiak = "Leo"
+                } else {
+                    zodiak = "Virgo"
+                }
+            } else if (bulanShow == "September"){
+                if(tanggal <=22){
+                    zodiak = "Virgo"
+                } else {
+                    zodiak = "Libra"
+                }
+            } else if(bulanShow == "October"){
+                if(tanggal <= 22){
+                    zodiak = "Libra"
+                } else{
+                    zodiak = "Scorpio"
+                }
+            } else if(bulanShow == "November"){
+                if(tanggal <= 21){
+                    zodiak = "Scorpio"
+                } else{
+                    zodiak = "Sagittarius"
+                }
+            }
+
+
+            var umur = new Date().getFullYear() -  inputTanggal.split('-')[0] ;
+            var pensiun = -(55 - umur)
+
+            //Push object ke arrayData
+            arrayData.push( {
+                inputNama,
+                tanggal,
+                bulanShow,
+                tahun,
+                zodiak,
+                umur,
+                pensiun,
+                inputKota
+            });     /* arrayData = [ {bulan: "03", inputKota: "Jakarta", inputNama: "Reinhart"
+            ,pensiun: -32, tahun: "1996", tanggal: "19", umur: 23, zodiak: "zodiak"}] */
+            console.log(arrayData);
+
+            ShowList(arrayData);
+
+        }
+
+        
+    }
+
+
+    function namaAscending() {
+        function compare (a,b) {
+            var nameA = a.inputNama
+            var nameB = b.inputNama
+
+            var comparison = 0;
+            if (nameA > nameB) {
+                comparison = 1;
+            }
+            else if (nameA < nameB) {
+                comparison = -1;
+            }
+            return comparison;
+        }
+        var arrayNamaAscending = arrayData.sort(compare)
+
+        ShowList(arrayNamaAscending);
+        console.log(arrayNamaAscending);
+
+            // 0: Object { inputNama: "Ann", tanggal: 23, bulanShow: "February", … }
+            // 1: Object { inputNama: "Reinhart", tanggal: 19, bulanShow: "March", … }
+            // 2: Object { inputNama: "Steph", tanggal: 3, bulanShow: "September", … }
+
+        // var kumpulanNamaArray = arrayData.map( val => { return (val.inputNama) });
+        // console.log(kumpulanNamaArray);
+
+        // var namaAscending = kumpulanNamaArray.sort();
+        // console.log(namaAscending);
+    }
+
+    function namaDescending() {
+        var namaDescending = arrayData.sort(function(a,b) {
+            var nameA = a.inputNama
+            var nameB = b.inputNama
+
+            var comparison = 0;
+            if (nameB > nameA) {
+                comparison = 1;
+            }
+            else if (nameB < nameA) {
+                comparison = -1;
+            }
+            return comparison;
+        })
+
+        ShowList(namaDescending);
+    }
+
+    function usiaAscending() {
+        var usiaAscending = arrayData.sort(function(a,b) {
+            var umurA = a.umur
+            var umurB = b.umur
+
+            var comparison = 0;
+            if (umurA > umurB) {
+                comparison = 1;
+            }
+            else if (umurA < umurB) {
+                comparison = -1;
+            }
+            return comparison
+        })
+
+        ShowList(usiaAscending);
+    }
+
+    function usiaDescending() {
+        var usiaDescending = arrayData.sort(function(a,b) {
+            var umurA = a.umur
+            var umurB = b.umur
+
+            var comparison = 0;
+            if (umurB > umurA) {
+                comparison = 1;
+            }
+            else if (umurB < umurA) {
+                comparison = -1;
+            }
+            return comparison
+        })
+
+        ShowList(usiaDescending);
+    }
+
+    function kotaAscending() {
+        var kotaAscending = arrayData.sort(function(a,b) {
+            var kotaA = a.inputKota
+            var kotaB = b.inputKota
+
+            comparison = 0;
+            if (kotaA > kotaB) {
+                comparison = 1;
+            }
+            else if (kotaA < kotaB) {
+                comparison = -1
+            }
+            return comparison;
+        } )
+
+        ShowList(kotaAscending);
+    }
+
+    function kotaDescending() {
+        var kotaDescending = arrayData.sort(function(a,b) {
+            var kotaA = a.inputKota;
+            var kotaB = b.inputKota;
+
+            comparison = 0;
+            if (kotaB > kotaA) {
+                comparison = 1;
+            }
+            else if (kotaB < kotaA) {
+                comparison = -1;
+            }
+            return comparison;
+        })
+
+        ShowList(kotaDescending);
+    }
+
+
+    var hapusRow = (indexMasuk) => {    //Misal indexMasuk = 1
+        arrayData = arrayData.filter( (val,i) => {
+            return i !== indexMasuk
+            //return 1 !== 1
+        })
+        console.log(arrayData);
+        ShowList(arrayData);        
+    }
+
+</script>
+
+</html>
+
+
+
+<!-- function fpb_kpk(num1,num2) {
+
+        
+    for ( var i = 0; )
+    if(Number.isInteger(num1/2)) {
+        num1 = num1 / 2;
+    }
+    console.log(num1);
+    
+}
+
+
+// fpb_kpk(3,1)
+fpb_kpk(90,168)     //fpb = 6   kpk = 2520 -->
